@@ -26,7 +26,7 @@ class ServoServer(threading.Thread):
                 grad = 0
             elif int(grad) > 360:
                 grad = 360
-            self.servos[servo-1] = int(grad)/360)*10
+            self.servos[servo-1] = (int(grad)/360)*10
             command=""
             for i in self.servos:
                 command = command+str(i)+" "
