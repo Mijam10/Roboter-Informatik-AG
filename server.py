@@ -1,5 +1,6 @@
 import socket
 import threading
+
 class ServoServer(threading.Thread):
     def __init__(self,port,servos):
         threading.Thread.__init__(self)
@@ -15,11 +16,12 @@ class ServoServer(threading.Thread):
         self.servos=[]
         for i in range(0, servos):
             self.servos.append(90)
+            
     def run(self):
         while True:
             clientsocket, addr = self.serversocket.accept()
-
             clientsocket.send(self.msg)
+            
     def setServo(self, servo, grad):
         try:
             if int(grad) < 0:
