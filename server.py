@@ -1,40 +1,35 @@
 import socket
 import threading
 class ServoServer(threading.Thread):
-    def __init__(self,port):
+    def __init__(self,port,servos):
         threading.Thread.__init__(self)
         self.threadID = 0
         self.name = ServoServer
         self.serversocket = socket.socket(
         socket.AF_INET, socket.SOCK_STREAM)
         host = socket.gethostname()
+        print(host)
         self.serversocket.bind((host, port))
         self.serversocket.listen(5)
         self.msg = "".encode('ascii')
-        self.x = 0
-        self.y = 0
+        self.servos=[]
+        for i in range(0, servos):
+            self.servos.append(90)
     def run(self):
         while True:
             clientsocket, addr = self.serversocket.accept()
 
             clientsocket.send(self.msg)
-    def setCommand(self,command):
+    def setServo(self, servo, grad):
         try:
-            command=str(command)
-            self.msg = command.encode('ascii')
-        except:
-            print("FalscheEingabe")
-    def setF(self,x):
-        try:
-            self.x = int(x)
-            command = str(self.x)+" "+str(self.y)
-            self.msg = command.encode('ascii')
-        except:
-            print("FalscheEingabe")
-    def setS(self,y):
-        try:
-            self.y = int(y)
-            command = str(self.x)+" "+str(self.y)
+            if int(grad) < 0:
+                grad = 0
+            elif int(grad) > 360:
+                grad = 360
+            self.servos[servo-1] = (int(grad)/360)*5
+            command=""
+            for i in self.servos:
+                command = command+str(i)+" "
             self.msg = command.encode('ascii')
         except:
             print("FalscheEingabe")
